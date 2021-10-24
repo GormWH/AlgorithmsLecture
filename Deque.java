@@ -9,12 +9,12 @@ import edu.princeton.cs.algs4.StdOut;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Deque<Item> /*implements Iterable<Item>*/ {
+public class Deque<Item> implements Iterable<Item> {
     // declaration of subclass Node
     private class Node {
-        Item item = null;
-        Node next = null;
-        Node before = null;
+        private Item item = null;
+        private Node next = null;
+        private Node before = null;
     }
 
     // instances
@@ -82,6 +82,7 @@ public class Deque<Item> /*implements Iterable<Item>*/ {
         try {
             Item item = first.item;
             first = first.next;
+            first.before = null;
             size--;
             return item;
         }
@@ -96,6 +97,7 @@ public class Deque<Item> /*implements Iterable<Item>*/ {
         try {
             Item item = last.item;
             last = last.before;
+            last.next = null;
             size--;
             return item;
         }
@@ -114,7 +116,7 @@ public class Deque<Item> /*implements Iterable<Item>*/ {
         private Node current = first;
 
         public boolean hasNext() {
-            return current.next != null;
+            return current != null;
         }
 
         public void remove() {
@@ -122,14 +124,13 @@ public class Deque<Item> /*implements Iterable<Item>*/ {
         }
 
         public Item next() {
-            try {
+            if (current != null) {
                 Item item = current.item;
                 current = current.next;
                 return item;
             }
-            catch (NoSuchElementException e) {
-                StdOut.println("null access in iterator.next()");
-                return null;
+            else {
+                throw new NoSuchElementException("null access in iterator.next()");
             }
         }
     }
@@ -137,11 +138,26 @@ public class Deque<Item> /*implements Iterable<Item>*/ {
     // unit testing (required)
     public static void main(String[] args) {
         Deque<Integer> intDeque = new Deque<Integer>();
+
+        StdOut.println("Checking add method");
+        StdOut.println("Expecting 3 2 1 4 5");
         intDeque.addFirst(1);
         intDeque.addFirst(2);
         intDeque.addFirst(3);
         intDeque.addLast(4);
         intDeque.addLast(5);
+        for (int item : intDeque) {
+            StdOut.println(item);
+        }
+        StdOut.println(intDeque.size());
+
+        StdOut.println("Checking remove method");
+        StdOut.println("removeFirst() " + intDeque.removeFirst());
+        StdOut.println("removeLast() " + intDeque.removeLast());
+        for (int item : intDeque) {
+            StdOut.println(item);
+        }
+        StdOut.println(intDeque.size());
     }
 
 }
