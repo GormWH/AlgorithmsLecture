@@ -1,11 +1,11 @@
 /* *****************************************************************************
- *  Name:              Ada Lovelace
- *  Coursera User ID:  123456
- *  Last modified:     October 16, 1842
+ *  Name:              SuHong Park
+ *  Coursera User ID:  4kidsp@naver.com
+ *  Last modified:     October 13, 2021
  **************************************************************************** */
 
 public class HelloWorld {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        System.out.println("Hello, World");
     }
 }
