@@ -4,8 +4,6 @@
  *  Last modified:     October 16, 1842
  **************************************************************************** */
 
-import edu.princeton.cs.algs4.StdOut;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -52,7 +50,7 @@ public class Deque<Item> implements Iterable<Item> {
             size++;
         }
         catch (IllegalArgumentException e) {
-            StdOut.print("null access on addFirst()");
+            // StdOut.print("null access on addFirst()");
         }
     }
 
@@ -73,7 +71,7 @@ public class Deque<Item> implements Iterable<Item> {
             size++;
         }
         catch (IllegalArgumentException e) {
-            StdOut.print("null access on addLast()");
+            // StdOut.print("null access on addLast()");
         }
     }
 
@@ -87,7 +85,7 @@ public class Deque<Item> implements Iterable<Item> {
             return item;
         }
         catch (NoSuchElementException e) {
-            StdOut.println("null access on removeFirst");
+            // StdOut.println("null access on removeFirst");
             return null;
         }
     }
@@ -102,7 +100,7 @@ public class Deque<Item> implements Iterable<Item> {
             return item;
         }
         catch (NoSuchElementException e) {
-            StdOut.println("null access on removeLast");
+            // StdOut.println("null access on removeLast");
             return null;
         }
     }
@@ -137,27 +135,27 @@ public class Deque<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-        Deque<Integer> intDeque = new Deque<Integer>();
+        // Deque<Integer> intDeque = new Deque<Integer>();
 
-        StdOut.println("Checking add method");
-        StdOut.println("Expecting 3 2 1 4 5");
-        intDeque.addFirst(1);
-        intDeque.addFirst(2);
-        intDeque.addFirst(3);
-        intDeque.addLast(4);
-        intDeque.addLast(5);
-        for (int item : intDeque) {
-            StdOut.println(item);
-        }
-        StdOut.println(intDeque.size());
+        // StdOut.println("Checking add method");
+        // StdOut.println("Expecting 3 2 1 4 5");
+        // intDeque.addFirst(1);
+        // intDeque.addFirst(2);
+        // intDeque.addFirst(3);
+        // intDeque.addLast(4);
+        // intDeque.addLast(5);
+        // for (int item : intDeque) {
+        //     StdOut.println(item);
+        // }
+        // StdOut.println(intDeque.size());
 
-        StdOut.println("Checking remove method");
-        StdOut.println("removeFirst() " + intDeque.removeFirst());
-        StdOut.println("removeLast() " + intDeque.removeLast());
-        for (int item : intDeque) {
-            StdOut.println(item);
-        }
-        StdOut.println(intDeque.size());
+        // StdOut.println("Checking remove method");
+        // StdOut.println("removeFirst() " + intDeque.removeFirst());
+        // StdOut.println("removeLast() " + intDeque.removeLast());
+        // for (int item : intDeque) {
+        //     StdOut.println(item);
+        // }
+        // StdOut.println(intDeque.size());
     }
 
 }
