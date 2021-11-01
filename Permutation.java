@@ -1,7 +1,7 @@
 /* *****************************************************************************
- *  Name:              Ada Lovelace
- *  Coursera User ID:  123456
- *  Last modified:     October 16, 1842
+ *  Name:              SuHong Park
+ *  Coursera User ID:  4kidsp@naver.com
+ *  Last modified:     November 02, 2021
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.StdIn;
@@ -15,9 +15,10 @@ public class Permutation {
             String word = StdIn.readString();
             sample.enqueue(word);
         }
-        while (k > 0) {
-            StdOut.println(sample.dequeue());
+        for (String word : sample) {
+            StdOut.println(word);
             k--;
+            if (k <= 0) break;
         }
     }
 }
