@@ -16,9 +16,9 @@ public class Permutation {
             sample.enqueue(word);
         }
         for (String word : sample) {
+            if (k <= 0) break;
             StdOut.println(word);
             k--;
-            if (k <= 0) break;
         }
     }
 }

@@ -11,29 +11,13 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
-    // declaration of subclass Node
-    private class Node {
-        private Item item;
-        private Node next = null;
-        private Node prev = null;
-
-        public Node(Item newItem) {
-            if (newItem != null) {
-                item = newItem;
-            }
-            else {
-                item = null;
-            }
-        }
-    }
-
-    // class instances of RandomizedQueue
-    private Node first = null;
-    private Node last = null;
+    private Item[] items;
     private int size = 0;
+    private int maxSize = 1;
 
     // construct an empty randomized queue
     public RandomizedQueue() {
+        items = (Item[]) new Object[1];
     }
 
     // is the randomized queue empty?
@@ -46,70 +30,50 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return size;
     }
 
+    // resize when array lacks capacity
+    private void resize(int capacity) {
+        Item[] copy = (Item[]) new Object[capacity];
+        for (int i = 0; i < size; i++) {
+            copy[i] = items[i];
+        }
+        items = copy;
+        maxSize = capacity;
+    }
+
     // add the item
     public void enqueue(Item item) {
         if (item == null)
-            throw new IllegalArgumentException("enqueue(Item item): called with null argument");
-        if (isEmpty()) {
-            first = new Node(item);
-            last = first;
+            throw new IllegalArgumentException("enqueue(): called with null argument");
+        if (size == maxSize) {
+            resize(size * 2);
         }
-        else {
-            last.next = new Node(item);
-            last.next.prev = last;
-            last = last.next;
-        }
-        size++;
+        items[size++] = item;
     }
 
     // remove and return a random item
     public Item dequeue() {
-        if (size == 0) {
-            throw new NoSuchElementException("dequeue(): no more element in queue");
-        }
-        Item item;
-        if (size == 1) {
-            item = first.item;
-            first = null;
-            last = null;
-        }
-        else {
-            Node cur = first;
-            int random = StdRandom.uniform(0, size);
-            for (int i = 0; i < random; i++) {
-                cur = cur.next;
-            }
-            item = cur.item;
-            if (cur.prev != null)
-                cur.prev.next = cur.next;
-            if (cur.next != null)
-                cur.next.prev = cur.prev;
-        }
-        size--;
+        if (size == 0) throw new NoSuchElementException("dequeue(): queue is empty");
+        int random = StdRandom.uniform(0, size);
+        Item item = items[random];
+        items[random] = items[--size];
+        items[size] = null;
+        if (size > 0 && size == maxSize / 4) resize(maxSize / 2);
         return item;
     }
 
     // return a random item (but do not remove it)
     public Item sample() {
-        if (size == 0) {
-            throw new NoSuchElementException("sample(): no more element in queue");
-        }
-        Item item;
-        Node cur = first;
+        if (size == 0) throw new NoSuchElementException("dequeue(): queue is empty");
         int random = StdRandom.uniform(0, size);
-        for (int i = 0; i < random; i++) {
-            cur = cur.next;
-        }
-        item = cur.item;
-        return item;
+        return items[random];
     }
 
     // return an independent iterator over items in random order
     public Iterator<Item> iterator() {
-        return new ListIterator();
+        return new ArrayIterator();
     }
 
-    private class ListIterator implements Iterator<Item> {
+    private class ArrayIterator implements Iterator<Item> {
         private int itemsLeft = size;
 
         public boolean hasNext() {
@@ -122,40 +86,16 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
         public Item next() {
             if (hasNext()) {
-                // get random item
                 int random = StdRandom.uniform(0, itemsLeft);
-                Node cur = first;
-                for (int i = 0; i < random; i++) {
-                    cur = cur.next;
-                }
-                Item item = cur.item;
-
-                // remove cur from queue and enqueue it to the last
-                if (random == 0) {
-                    if (size == 1) {
-                        first = null;
-                        last = null;
-                    }
-                    else {
-                        first = first.next;
-                        first.prev = null;
-                    }
-                }
-                else if (random == size - 1) {
-                    last = last.prev;
-                    last.next = null;
+                Item item = items[random];
+                if (random != itemsLeft - 1) {
+                    items[random] = items[--itemsLeft];
+                    items[itemsLeft] = item;
                 }
                 else {
-                    cur.next.prev = cur.prev;
-                    cur.prev.next = cur.next;
+                    itemsLeft--;
                 }
-                size--;
-                itemsLeft--;
-                enqueue(item);
-
-                // return item
                 return item;
-
             }
             else {
                 throw new NoSuchElementException("iterator.next(): no more items in iteration");
@@ -165,13 +105,19 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-        RandomizedQueue<Integer> intQueue = new RandomizedQueue<Integer>();
-        intQueue.enqueue(1);
-        intQueue.enqueue(2);
-        intQueue.enqueue(3);
-        intQueue.enqueue(4);
-        intQueue.enqueue(5);
-        for (int integer : intQueue) {
+        RandomizedQueue<Integer> sample = new RandomizedQueue<Integer>();
+        StdOut.println(sample.size() + " " + sample.maxSize);
+        sample.enqueue(1);
+        StdOut.println(sample.size() + " " + sample.maxSize);
+        sample.enqueue(2);
+        StdOut.println(sample.size() + " " + sample.maxSize);
+        sample.enqueue(3);
+        StdOut.println(sample.size() + " " + sample.maxSize);
+        sample.enqueue(4);
+        StdOut.println(sample.size() + " " + sample.maxSize);
+        sample.enqueue(5);
+        StdOut.println(sample.size() + " " + sample.maxSize);
+        for (int integer : sample) {
             StdOut.println(integer);
         }
     }
